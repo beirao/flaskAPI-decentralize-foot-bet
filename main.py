@@ -2,6 +2,7 @@ import json
 from flask import * 
 import sqlite3 as db
 import yaml
+import logging
 
 def app():
     with open("config-api.yaml", "r") as stream:
@@ -10,10 +11,14 @@ def app():
         except yaml.YAMLError as exc:
             print(exc)
 
+    logging.basicConfig(filename=config_bet["logPath"], level=logging.INFO,
+            format="%(asctime)s %(levelname)s %(message)s")
+
     app = Flask(__name__)
 
     @app.route('/', methods=['GET']) # http://127.0.0.1:8000/
     def main():
+        logging.info("Main called")
         data = {"Working !" : 1}
         return(json.dumps(data))
 
@@ -21,6 +26,7 @@ def app():
     def getDeployedContract():
         try :
             ret = str(request.args.get('return')) # /getDeployedContracts/?return=[address/match_id]
+            logging.info(f"getDeployedContracts called : ret = {ret}")
             connection = db.connect(config_bet["databasePath"])
             cursor = connection.cursor()
             req = cursor.execute(f'SELECT {ret} FROM match WHERE isDeployed = ?',(1,))
@@ -28,6 +34,7 @@ def app():
             data = {'contractDeployed': [x[0] for x in deployementNeeded]}
         except Exception as e :
             print("Error /getDeployedContracts/ :",e)
+            logging.error(f"Error /getDeployedContracts/ : {e}")
             data = {'Error': e}
         finally :
             connection.close()
@@ -37,6 +44,7 @@ def app():
     def getMatchDataWithAddress():
         try :
             query = str(request.args.get('address')) # /getMatchDataWithAddress/?address=addr
+            logging.info(f"getMatchDataWithAddress called : address = {query}")
             connection = db.connect(config_bet["databasePath"])
             cursor = connection.cursor()
             req = cursor.execute('SELECT * FROM match WHERE address = ?', (query,))
@@ -59,6 +67,7 @@ def app():
                     }
         except Exception as e :
             print("Error /getMatchDataWithAddress/ :",e)
+            logging.error(f"Error /getMatchDataWithAddress/ : {e}")
             data = {'Error': e}
         finally :
             connection.close()
@@ -68,6 +77,7 @@ def app():
     def getMatchDataWithMatchId():
         try :
             query = str(request.args.get('match_id')) # /getMatchDataWithMatchId/?match_id=ID 
+            logging.info(f"getMatchDataWithMatchId called : match_id = {query}")
             connection = db.connect(config_bet["databasePath"])
             cursor = connection.cursor()
             req = cursor.execute('SELECT * FROM match WHERE match_id = ?', (query,))
@@ -90,6 +100,7 @@ def app():
                     }
         except Exception as e :
             print("Error /getMatchDataWithMatchId/ :",e)
+            logging.error(f"Error /getMatchDataWithMatchId/ : {e}")            
             data = {'Error': e}
         finally :
             connection.close()

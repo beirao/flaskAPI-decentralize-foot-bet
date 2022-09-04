@@ -1,1 +1,2 @@
 databasePath: "../bdd_match.db"
+logPath: "../log_api.txt"
