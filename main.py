@@ -29,7 +29,7 @@ def app():
             logging.info(f"getDeployedContracts called : ret = {ret}")
             connection = db.connect(config_bet["databasePath"])
             cursor = connection.cursor()
-            req = cursor.execute(f'SELECT {ret} FROM match WHERE isDeployed = ?',(1,))
+            req = cursor.execute(f'SELECT {ret} FROM matches WHERE isDeployed = ?',(1,))
             deployementNeeded  = req.fetchall()
             data = {'contractDeployed': [x[0] for x in deployementNeeded]}
         except Exception as e :
@@ -47,7 +47,7 @@ def app():
             logging.info(f"getMatchDataWithAddress called : address = {query}")
             connection = db.connect(config_bet["databasePath"])
             cursor = connection.cursor()
-            req = cursor.execute('SELECT * FROM match WHERE address = ?', (query,))
+            req = cursor.execute('SELECT * FROM matches WHERE address = ?', (query,))
             matchData = req.fetchall()
             print(matchData)
             data = {
@@ -80,7 +80,7 @@ def app():
             logging.info(f"getMatchDataWithMatchId called : match_id = {query}")
             connection = db.connect(config_bet["databasePath"])
             cursor = connection.cursor()
-            req = cursor.execute('SELECT * FROM match WHERE match_id = ?', (query,))
+            req = cursor.execute('SELECT * FROM matches WHERE match_id = ?', (query,))
             matchData = req.fetchall()
             print(matchData)
             data = {
