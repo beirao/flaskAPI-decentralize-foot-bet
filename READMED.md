@@ -44,14 +44,10 @@ Specify the data base path in the **config-api.yaml**
 sudo docker build -t api-foot-boarbet .
 ```
 
-## Create image
-
 ## Run image
 
 ```bash
-sudo docker run -p 80:80 api-foot-boarbet
-
-sudo docker run -p 80:80 -d --mount type=bind,src="$(pwd)/logs",dst=/logs api-foot-boarbet
+sudo docker run api-foot-boarbet
 ```
 
 ## Save the image
