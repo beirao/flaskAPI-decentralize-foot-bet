@@ -1,0 +1,4 @@
+persistenceTimeEndedBet: 10 # days
+
+databasePath: "ext/matches.db"
+logPath: "ext/log_api.txt"
