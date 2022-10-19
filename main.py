@@ -188,6 +188,43 @@ def getAllProcessingBet():
         return(json.dumps(data))
 
 
+@app.route('/getAllRecentEndedBet/', methods=['GET']) # http://127.0.0.1:8000/getAllRecentEndedBet/
+def getAllRecentEndedBet():
+    try :
+        connection = db.connect(config_bet["databasePath"])
+        cursor = connection.cursor()
+        logging.info(f"getAllRecentEndedBet called")
+        persistenceTime_timestamp = int(time.time()) + config_bet["persistenceTimeEndedBet"] * 24 * 60 * 60
+        req = cursor.execute('SELECT * FROM matches WHERE date < ? AND isDeployed == ?', (persistenceTime_timestamp, 2))
+        matchData = req.fetchall()        
+        data = json.loads("[]")
+        for match in matchData : 
+            dataElement = {
+                        "match_id": match[0],
+                        "date": match[1],
+                        "status": match[2],
+                        "league_id": match[3],
+                        "league_string": match[4],
+                        "home_id": match[5],
+                        "home_string": match[6],
+                        "home_logo": match[7],
+                        "home_score": match[8],
+                        "away_id": match[9],
+                        "away_string": match[10],
+                        "away_logo": match[11],
+                        "away_score": match[12],
+                        "isDeployed": match[13],
+                        "address": match[14]
+                    }
+            data.append(dataElement)
+    except Exception as e :
+        print("Error /getAllRecentEndedBet/ :",e)
+        logging.error(f"Error /getAllRecentEndedBet/ : {e}")
+        data = {'Error': e}
+    finally :
+        connection.close()
+        return(json.dumps(data))
+
 @app.route('/getAllEndedBet/', methods=['GET']) # http://127.0.0.1:8000/getAllEndedBet/
 def getAllEndedBet():
     try :
@@ -195,7 +232,7 @@ def getAllEndedBet():
         cursor = connection.cursor()
         logging.info(f"getAllEndedBet called")
         persistenceTime_timestamp = int(time.time()) + config_bet["persistenceTimeEndedBet"] * 24 * 60 * 60
-        req = cursor.execute('SELECT * FROM matches WHERE date < ? AND isDeployed == ?', (persistenceTime_timestamp, 2))
+        req = cursor.execute('SELECT * FROM matches WHERE isDeployed == ?', (2,))
         matchData = req.fetchall()        
         data = json.loads("[]")
         for match in matchData : 

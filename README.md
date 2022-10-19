@@ -1,6 +1,6 @@
-# FlaskAPI for [frontend-decentralize-foot-bet](https://github.com/beirao/frontend-decentralize-foot-bet)
+# Flask API for [frontend-decentralize-foot-bet](https://github.com/beirao/frontend-decentralize-foot-bet)
 
-## This Flask app implement [Gunicorn](https://gunicorn.org/) as WSGI server
+This Flask app implement [Gunicorn](https://gunicorn.org/) as WSGI server
 
 ### Launch the API with this command :
 
@@ -18,13 +18,13 @@ http://0.0.0.0:8080/getDeployedContracts/?return=RET
 
 return can be : address, match_id, league_id, league_string, date...
 
-### Get match data with the its address
+### Get match data with its address
 
 ```url
 http://0.0.0.0:8080/getMatchDataWithAddress/?address=ADDR
 ```
 
-### Get match data with the its ID
+### Get match data with its ID
 
 ```url
 http://0.0.0.0:8080/getMatchDataWithMatchId/?match_id=ID
@@ -46,6 +46,12 @@ http://0.0.0.0:8080/getAllProcessingBet/
 
 ```url
 http://0.0.0.0:8080/getAllEndedBet/
+```
+
+### Get all recent ended betget
+
+```url
+http://0.0.0.0:8080/AllRecentEndedBet/
 ```
 
 ## The Database
